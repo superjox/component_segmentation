@@ -10,12 +10,15 @@ class Path:
     name: str
     links: 'List[Path.LinkEntry]'
     bins: 'List[Path.Bin]'
+    bin_set: []
+    mapping_id2idx: {}
 
     def __init__(self, name=''):
         self.name = name
         self.bins = []  # Bin
         self.links = []  # LinkEntry
-        self.__bin_set = set()
+        self.bin_set = set()
+        self.mapping_id2idx = dict()
 
     class Bin:
         next_bin: int
@@ -43,10 +46,10 @@ class Path:
             # TODO: self.insert_size will require a topology search to find this
 
     def __contains__(self, item):  # used by " x in Path "
-        return item in self.__bin_set
+        return item in self.bin_set
 
     def finalize_bins(self):
-        self.__bin_set = {x.bin_id for x in self.bins}  # build and cache a set
+        self.bin_set = {x.bin_id for x in self.bins}  # build and cache a set
 
 
 
