@@ -52,6 +52,12 @@ class GraphPath:
         self.bin_set = {x.bin_id for x in self.bins}  # build and cache a set
 
 
+@dataclass
+class GraphBins:
+    bins: {}
+    next_bins: []
+    mapping_id2idx: {}
+
 
 ## For Output to RDF  ###########
 @dataclass

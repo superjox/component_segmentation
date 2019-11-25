@@ -73,14 +73,16 @@ def find_dividers(matrix: List[GraphPath]) -> Tuple[Dict[int, Dict[int, set]],
             # What if downstream < upstream?
             divider_verified = downstream < upstream
             if not divider_verified:
-                downstream_binID = path.bins[path.mapping_id2idx[upstream+1]].next_bin
-                if downstream_binID < downstream:
-                    divider_verified = True
-                # missing_range = list(range(upstream + 1, downstream))
-                # for i in missing_range:
-                #     if i in path:
-                #         divider_verified = True
-                #         break  # stop as soon as we have confirmation
+                # if upstream > 260:
+                #     pass
+                # downstream_binID = path.bins[path.mapping_id2idx[upstream]].next_bin
+                # if downstream_binID < downstream:
+                #     divider_verified = True
+                missing_range = list(range(upstream + 1, downstream))
+                for i in missing_range:
+                    if i in path:
+                        divider_verified = True
+                        break  # stop as soon as we have confirmation
             if divider_verified:
                 # if (upstream + 1) in leaving.keys() :
                 #     print(f"Found inherited rearrangement {upstream+1}")

@@ -1,6 +1,6 @@
 import json
 import logging
-from matrixcomponent.matrix import GraphPath
+from matrixcomponent.matrix import GraphPath, GraphBins
 
 LOGGER = logging.getLogger(__name__)
 
@@ -10,7 +10,9 @@ def parse(file):
             for line in f:
                 data.append(json.loads(line))
 
+        Bins = GraphBins()
         paths = []
+
         max_bin = 1
         for path in data:
             if "path_name" in path:
@@ -18,7 +20,15 @@ def parse(file):
 
                 p = GraphPath(path['path_name'])
 
+                # idx = 0
+                # for b in path['bins']:
+                #     Bins.bins[b[0]] =
+
+
+
+
                 prev_bin = p.Bin()
+                p.mapping_id2idx[0] = 0
                 idx = 0
                 for b in path['bins']:
                     bin = p.Bin()
@@ -30,7 +40,8 @@ def parse(file):
                     prev_bin = bin
                     p.mapping_id2idx[b[0]] = idx
                     idx += 1
-                prev_bin.next_bin = max_bin
+                p.mapping_id2idx[prev_bin.bin_id] = idx-1
+                prev_bin.next_bin = prev_bin.bin_id
                 p.bins.append(prev_bin)  # last bin in a GraphPath needs to indicate stop, max_bin?
 
                 p.finalize_bins()
