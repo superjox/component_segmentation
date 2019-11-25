@@ -15,7 +15,7 @@ class Path:
         self.name = name
         self.bins = []  # Bin
         self.links = []  # LinkEntry
-        self.__bin_set = set()
+        self._bin_set = set()
 
     class Bin:
         next_bin: int
@@ -43,25 +43,26 @@ class Path:
             # TODO: self.insert_size will require a topology search to find this
 
     def __contains__(self, item):  # used by " x in Path "
-        return item in self.__bin_set
+        return item in self._bin_set
 
     def finalize_bins(self):
-        self.__bin_set = {x.bin_id for x in self.bins}  # build and cache a set
+        self._bin_set = {x.bin_id for x in self.bins}  # build and cache a set
 
 
 
-## For Output to RDF
+## For Output to RDF  ###########
 @dataclass
 class LinkColumn:
     upstream: int
     downstream: int
-    participants: Set[str]
+    participants: Set[str]  # path names
 
 
 class Component:
     """Block of co-linear variation within a Graph Matrix"""
     first_bin: int
     last_bin: int
+    # active_members: int
     arrivals: List[LinkColumn]
     departures: List[LinkColumn]
 
@@ -77,6 +78,8 @@ class Component:
 @dataclass
 class PangenomeSchematic:
     components: List[Component]
+    path_names: List[str]
+    break_points: List[dict]
 
     def json_dump(self):
         def dumper(obj):
@@ -87,5 +90,5 @@ class PangenomeSchematic:
             except:
                 return obj
 
-        return json.dumps(self.components, default=dumper, indent=4)
+        return json.dumps(self, default=dumper, indent=4)
 
