@@ -18,12 +18,23 @@ class Path:
         self.__bin_set = set()
 
     class Bin:
-        def __init__(self, bin_id, coverage, inversion_rate, mean_pos, sequence=''):
+        next_bin: int
+
+        def __init__(self):
+            self.bin_id = 0
+            self.coverage = 0
+            self.inversion_rate = 0
+            self.mean_pos = 0
+            self.sequence = ''
+            self.next_bin = 0
+
+        def set(self, bin_id, coverage, inversion_rate, mean_pos, sequence=''):
             self.bin_id = bin_id
             self.coverage = coverage
             self.inversion_rate = inversion_rate
             self.mean_pos = mean_pos
             self.sequence = sequence
+            self.next_bin = 0
 
     class LinkEntry:
         def __init__(self, upstream, downstream):

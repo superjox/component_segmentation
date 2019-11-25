@@ -17,8 +17,13 @@ def parse(file):
 
                 p = matrix.Path(path['path_name'])
 
+                prev_bin = p.Bin()
                 for b in path['bins']:
-                    p.bins.append(p.Bin(b[0], b[1], b[2], b[3]))
+                    bin = p.Bin()
+                    bin.set(b[0], b[1], b[2], b[3])
+                    p.bins.append(bin)
+                    prev_bin.next_bin = b[0]
+                    prev_bin = bin
                 p.finalize_bins()
                 
                 for l in path['links']:
