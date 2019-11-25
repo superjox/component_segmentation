@@ -11,7 +11,7 @@ from typing import List, Tuple, Set, Dict
 from pathlib import Path as osPath
 from nested_dict import nested_dict
 
-from matrixcomponent.matrix import Path, PangenomeSchematic, Component, LinkColumn
+from matrixcomponent.matrix import GraphPath, PangenomeSchematic, Component, LinkColumn
 import os
 import logging
 import argparse
@@ -23,7 +23,7 @@ LOGGER = logging.getLogger(__name__)
 """logging.Logger: The logger for this module"""
 
 
-def segment_matrix(matrix: List[Path]) -> PangenomeSchematic:
+def segment_matrix(matrix: List[GraphPath]) -> PangenomeSchematic:
     print(f"Starting Segmentation process on {len(matrix)} Paths.")
     schematic = PangenomeSchematic([], [p.name for p in matrix], [])
     incoming, outgoing, dividers = find_dividers(matrix)
@@ -58,8 +58,8 @@ def segment_matrix(matrix: List[Path]) -> PangenomeSchematic:
     return schematic
 
 
-def find_dividers(matrix: List[Path]) -> Tuple[Dict[int, Dict[int, set]],
-                                               Dict[int, Dict[int, set]], Set[int]]:
+def find_dividers(matrix: List[GraphPath]) -> Tuple[Dict[int, Dict[int, set]],
+                                                    Dict[int, Dict[int, set]], Set[int]]:
     max_bin = 1
     leaving = nested_dict(2, set)  # containing the set of participating Paths on that link column
     entering = nested_dict(2, set)  # list of indices of new components
@@ -94,7 +94,7 @@ def find_dividers(matrix: List[Path]) -> Tuple[Dict[int, Dict[int, set]],
     return entering, leaving, dividers
 
 
-def discard_useless_links(matrix: List[Path]):
+def discard_useless_links(matrix: List[GraphPath]):
     """https://github.com/vgteam/odgi/issues/48
     Links that simply span a gap in the matrix can be discarded"""
     for path in matrix:

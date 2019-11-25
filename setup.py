@@ -20,6 +20,7 @@ setup(
         'nested-dict==1.61',
         'numpy==1.17.2',
         'scipy==1.3.1',
+        'dataclasses==0.7',
     ],
     # extras_require = {'optimized_alignment': ['blist>=1.3.6']}, #for optional packages
     dependency_links=[],

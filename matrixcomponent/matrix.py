@@ -4,12 +4,12 @@ from dataclasses import dataclass
 from typing import List, Any, Set
 
 
-## Path is all for input files
+## GraphPath is all for input files
 
-class Path:
+class GraphPath:
     name: str
-    links: 'List[Path.LinkEntry]'
-    bins: 'List[Path.Bin]'
+    links: 'List[GraphPath.LinkEntry]'
+    bins: 'List[GraphPath.Bin]'
 
     def __init__(self, name=''):
         self.name = name
@@ -42,7 +42,7 @@ class Path:
             self.downstream = downstream
             # TODO: self.insert_size will require a topology search to find this
 
-    def __contains__(self, item):  # used by " x in Path "
+    def __contains__(self, item):  # used by " x in GraphPath "
         return item in self._bin_set
 
     def finalize_bins(self):
