@@ -168,8 +168,8 @@ def main():
     LOGGER.info("starting...\n")
     Paths = JSONparser.parse(args.json_file)
     schematic = segment_matrix(Paths)
-    # p = osPath(args.json_file).with_suffix('.schematic.json')
-    p = osPath(args.output_folder).joinpath(args.json_file).with_suffix('.schematic.json')
+    name = osPath(args.json_file).name
+    p = osPath(args.output_folder).joinpath(name).with_suffix('.schematic.json')
     with p.open('w') as fpgh9:
         fpgh9.write(schematic.json_dump())
     print("Saved results to", p)
