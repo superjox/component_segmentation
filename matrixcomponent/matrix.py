@@ -60,7 +60,7 @@ class Component:
         # careful construction can reuse Bin.sequence memory pointer"""
     first_bin: int
     last_bin: int
-    occupants: Set[int]
+    occupants: List[int]
     matrix: Dict[int, List[List[int]]]
     arrivals: List[LinkColumn]
     departures: List[LinkColumn]
@@ -68,7 +68,7 @@ class Component:
     def __init__(self, first_bin: int, last_bin: int):
         self.first_bin = first_bin
         self.last_bin = last_bin
-        self.occupants = set()
+        self.occupants = []
         self.matrix = {}
         self.arrivals = []  # reverse ordered Links
         self.departures = []  # ordered Links

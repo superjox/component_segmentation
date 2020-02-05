@@ -25,14 +25,16 @@ LOGGER = logging.getLogger(__name__)
 
 def populate_component_occupancy(schematic: PangenomeSchematic):
     for component in schematic.components:
-        # are matrix paths in the same order as schematic.path_names?
-        # side effect instead of return
-        # component.occupants = [any([bin.coverage > 0.1 for bin in bins if bin])
-        #                        for bins in component.matrix]
-        for row_number, bins in component.matrix.items():
-            if any(bins):
-                component.occupants.add(row_number)
+        # matrix paths are in the same order as schematic.path_names
+        occ = [False] * len(schematic.path_names)
+        for row_number in component.matrix.keys():
+            occ[row_number] = True
+        component.occupants = occ  # side effect instead of return
 
+        #Old Code: if you want to use a set of ints instead
+        # for row_number, bins in component.matrix.items():
+        #     if any(bins):
+        #         component.occupants.add(row_number)
     print("Populated Occupancy per component per path.")
 
 
