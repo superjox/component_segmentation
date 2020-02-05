@@ -1,7 +1,7 @@
 """Python object models to be manipulated"""
 import json
 from dataclasses import dataclass
-from typing import List, Any, Set
+from typing import List, Any, Set, Dict
 
 
 ## Path is all for input files
@@ -60,16 +60,16 @@ class Component:
         # careful construction can reuse Bin.sequence memory pointer"""
     first_bin: int
     last_bin: int
-    occupants: List[bool]
-    matrix: List[List[Bin]]
+    occupants: Set[int]
+    matrix: Dict[int, List[List[int]]]
     arrivals: List[LinkColumn]
     departures: List[LinkColumn]
 
     def __init__(self, first_bin: int, last_bin: int):
         self.first_bin = first_bin
         self.last_bin = last_bin
-        self.occupants = []
-        self.matrix = []
+        self.occupants = set()
+        self.matrix = {}
         self.arrivals = []  # reverse ordered Links
         self.departures = []  # ordered Links
 
@@ -95,5 +95,5 @@ class PangenomeSchematic:
             except:
                 return obj
 
-        return json.dumps(self, default=dumper, indent=4)
+        return json.dumps(self, default=dumper, indent=2)
 

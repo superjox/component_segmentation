@@ -27,23 +27,26 @@ def populate_component_occupancy(schematic: PangenomeSchematic):
     for component in schematic.components:
         # are matrix paths in the same order as schematic.path_names?
         # side effect instead of return
-        component.occupants = [any([bin.coverage > 0.1 for bin in bins if bin])
-                               for bins in component.matrix]
+        # component.occupants = [any([bin.coverage > 0.1 for bin in bins if bin])
+        #                        for bins in component.matrix]
+        for row_number, bins in component.matrix.items():
+            if any(bins):
+                component.occupants.add(row_number)
+
     print("Populated Occupancy per component per path.")
 
 
 def populate_component_matrix(paths: List[Path], schematic: PangenomeSchematic):
     for component in schematic.components:
         # paths paths are in the same order as schematic.path_names
-        for i, path in enumerate(paths):
+        for row_number, path in enumerate(paths):
             relevant = [bin for bin in path.bins if
                         component.first_bin <= bin.bin_id <= component.last_bin]  # very costly loop
-            padded = []
             if relevant:
                 padded = [[]] * (component.last_bin - component.first_bin + 1)
                 for bin in relevant:
                     padded[bin.bin_id - component.first_bin] = Bin(bin.coverage, bin.inversion_rate)
-            component.matrix.append(padded)  # ensure there's always 1 entry for each path
+                component.matrix[row_number] = padded
     print("Populated Matrix per component per path.")
     populate_component_occupancy(schematic)
 
@@ -108,7 +111,7 @@ def add_adjacent_connector_column(component, next_component, schematic):
     adjacents = []
     for row in range(len(schematic.path_names)):
         connection_exists = False
-        if component.occupants[row] and next_component.occupants[row]:  # occupant present
+        if row in component.occupants and row in next_component.occupants:  # occupant present
             # n_arrivals = sum([column.participants[row] for column in component.arrivals])
             departed = sum([column.participants[row] for column in component.departures])
             # connection_exists = n_arrivals + 1 > departed
